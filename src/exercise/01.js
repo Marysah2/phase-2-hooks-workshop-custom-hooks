@@ -1,24 +1,23 @@
-import { useEffect } from "react";
+// src/exercise/01.js
+import { useEffect, useRef } from "react";
 
-/* ✅ create a new function called useDocumentTitle */
-/* 👀 export function useDocumentTitle() {} */
+function useDocumentTitle(title) {
+  const defaultTitle = useRef(document.title);
 
-export default function Home() {
-  /* 
-    ✅ move the useEffect code into your useDocumentTitle function
-   then, call the useDocumentTitle hook in your component
-  */
+  // Use provided title OR default "Welcome to the home page!"
+  const titleToUse = title !== undefined ? title : "Welcome to the home page!";
+
   useEffect(() => {
-    document.title = "Welcome to the home page!";
-  }, []);
+    document.title = titleToUse;
+  }, [titleToUse]);
 
-  return (
-    <div>
-      <h1>Home Page</h1>
-      <p>
-        To see the title change in the browser tab, click the 'Open in new tab'
-        link above
-      </p>
-    </div>
-  );
+  // Restore original title on unmount
+  useEffect(() => {
+    return () => {
+      document.title = defaultTitle.current;
+    };
+  }, []);
 }
+
+// NAMED EXPORT — REQUIRED
+export { useDocumentTitle };
